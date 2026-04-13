@@ -1,0 +1,7 @@
+Vector embeddings are numerical representations of data that capture semantic meaning. In natural language processing, words, sentences, or documents are converted into vectors in a high-dimensional space. These vectors allow machines to understand relationships between different pieces of text.
+
+Embedding models, such as those provided by sentence-transformers, are trained on large datasets to ensure that similar texts have similar vector representations. For example, the sentences "What is AI?" and "Explain artificial intelligence" would have vectors that are close together in the embedding space.
+
+Similarity between vectors is often measured using cosine similarity, which calculates the angle between two vectors. This allows systems to retrieve the most relevant documents for a given query.
+
+Vector embeddings are a fundamental component of modern RAG systems, search engines, and recommendation systems. They enable efficient and scalable similarity search across large datasets.
