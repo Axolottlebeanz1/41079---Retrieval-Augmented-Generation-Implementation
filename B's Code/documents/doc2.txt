@@ -1,0 +1,9 @@
+Retrieval-Augmented Generation (RAG) is a technique in natural language processing that combines document retrieval with text generation. Instead of relying solely on a model’s internal knowledge, RAG systems retrieve relevant information from external sources and use it to generate more accurate and context-aware responses.
+
+A typical RAG pipeline consists of two main components: a retriever and a generator. The retriever searches a document database or knowledge base to find information relevant to a user’s query. This is often done using vector embeddings and similarity search techniques such as cosine similarity.
+
+The generator, often a large language model, takes the retrieved documents as context and produces a final answer. This allows the system to provide up-to-date and domain-specific responses that are grounded in real data.
+
+RAG systems are widely used in applications such as chatbots, search engines, and question-answering systems. They are especially useful in domains where accuracy and factual correctness are important, such as healthcare, legal research, and technical support.
+
+One challenge of RAG systems is ensuring that the retrieved documents are relevant and not misleading. Poor retrieval can lead to incorrect or hallucinated answers. Therefore, improving retrieval quality and document ranking is a key area of research.

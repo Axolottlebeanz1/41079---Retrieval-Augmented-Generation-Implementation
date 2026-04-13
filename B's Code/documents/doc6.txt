@@ -1,0 +1,7 @@
+Data science is an interdisciplinary field that combines statistics, computer science, and domain knowledge to extract insights from data. It involves collecting, cleaning, analyzing, and visualizing data to support decision-making.
+
+The data science process typically includes data collection, data preprocessing, exploratory data analysis, modeling, and evaluation. Tools such as Python, R, and SQL are commonly used in data science workflows.
+
+Data scientists use various techniques such as statistical analysis, machine learning, and data visualization to uncover patterns and trends. Libraries like pandas, NumPy, and Matplotlib are widely used for data manipulation and visualization.
+
+Applications of data science include business analytics, healthcare, finance, marketing, and sports analytics. As data continues to grow in volume and complexity, data science plays an increasingly important role in modern organizations.
