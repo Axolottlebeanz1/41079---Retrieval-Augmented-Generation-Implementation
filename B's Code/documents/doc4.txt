@@ -1,7 +1,1 @@
-Artificial intelligence (AI) refers to the simulation of human intelligence in machines that are designed to think and act like humans. AI systems can perform tasks such as reasoning, learning, problem-solving, perception, and language understanding.
-
-AI can be categorized into narrow AI and general AI. Narrow AI is designed to perform specific tasks, such as facial recognition or language translation, while general AI aims to perform any intellectual task that a human can do. Currently, most AI systems fall under narrow AI.
-
-AI technologies include machine learning, natural language processing, computer vision, and robotics. These technologies are used in applications such as virtual assistants, autonomous vehicles, medical diagnosis, and financial analysis.
-
-Ethical considerations are an important aspect of AI development. Issues such as privacy, bias, accountability, and job displacement must be addressed to ensure responsible use of AI technologies.
+Sydney is situated in New South Wales, Australia.
