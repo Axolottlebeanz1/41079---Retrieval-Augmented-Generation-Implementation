@@ -2,6 +2,7 @@ import os
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
+from docx import Document
 
 class Retriever:
     def __init__(self, doc_path="documents"):
@@ -12,10 +13,22 @@ class Retriever:
 
     def load_documents(self, path):
         for file in os.listdir(path):
+            full_path = os.path.join(path, file)
+
+            # 📄 TXT files
             if file.endswith(".txt"):
-                with open(os.path.join(path, file), "r", encoding="utf-8") as f:
+                with open(full_path, "r", encoding="utf-8") as f:
                     text = f.read()
                     self.documents.append(text)
+
+            # 📄 DOCX files
+            elif file.endswith(".docx"):
+                doc = Document(full_path)
+                text = "\n".join([para.text for para in doc.paragraphs])
+                sentences = text.split(". ")
+                for s in sentences:
+                    if len(s.strip()) > 20:
+                        self.documents.append(s.strip())
 
         self.embeddings = self.model.encode(self.documents)
 
