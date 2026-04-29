@@ -8,9 +8,9 @@ class Reader:
 
     def generate_answer(self, query, retrieved_chunks):
         if not retrieved_chunks:
-            return "Sorry, I couldn't find relevant information."
+            return "Sorry, that information is not available in the provided documents."
 
-        # Handle dict or string
+        
         if isinstance(retrieved_chunks[0], dict):
             chunks = [c["full"] for c in retrieved_chunks[:2]]
         else:
@@ -19,7 +19,7 @@ class Reader:
         context = "\n".join(chunks)
 
         prompt = f"""
-Answer the question clearly and concisely using the context.
+Answer the question clearly and concisely using the context in ONE sentence.
 
 Context:
 {context}
