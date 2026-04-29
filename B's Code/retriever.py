@@ -1,42 +1,117 @@
 import os
+import fitz
+from docx import Document
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
-from docx import Document
+
 
 class Retriever:
-    def __init__(self, doc_path="documents"):
+    def __init__(
+        self,
+        doc_path="documents",
+        allowed_extensions=None
+    ):
         self.model = SentenceTransformer("all-MiniLM-L6-v2")
         self.documents = []
         self.embeddings = []
+
+        if allowed_extensions is None:
+            allowed_extensions = [".txt", ".docx", ".pdf"]
+
+        self.allowed_extensions = allowed_extensions
+
         self.load_documents(doc_path)
 
     def load_documents(self, path):
         for file in os.listdir(path):
             full_path = os.path.join(path, file)
 
-            # 📄 TXT files
-            if file.endswith(".txt"):
-                with open(full_path, "r", encoding="utf-8") as f:
-                    text = f.read()
-                    self.documents.append(text)
+            # Skip files user is not allowed to access
+            if not any(
+                file.endswith(ext)
+                for ext in self.allowed_extensions
+            ):
+                continue
 
-            # 📄 DOCX files
+            # -------------------------
+            # TXT FILES
+            # -------------------------
+            if file.endswith(".txt"):
+                with open(
+                    full_path,
+                    "r",
+                    encoding="utf-8"
+                ) as f:
+                    text = f.read()
+
+                    sentences = text.split(". ")
+                    for sentence in sentences:
+                        if len(sentence.strip()) > 20:
+                            self.documents.append(sentence.strip())
+
+            # -------------------------
+            # DOCX FILES
+            # -------------------------
             elif file.endswith(".docx"):
                 doc = Document(full_path)
-                text = "\n".join([para.text for para in doc.paragraphs])
+                text = "\n".join(
+                    [para.text for para in doc.paragraphs]
+                )
+
                 sentences = text.split(". ")
-                for s in sentences:
-                    if len(s.strip()) > 20:
-                        self.documents.append(s.strip())
+                for sentence in sentences:
+                    if len(sentence.strip()) > 20:
+                        self.documents.append(sentence.strip())
 
-        self.embeddings = self.model.encode(self.documents)
+            # -------------------------
+            # PDF FILES
+            # -------------------------
+            elif file.endswith(".pdf"):
+                pdf = fitz.open(full_path)
+                text = ""
 
-    def retrieve(self, query, top_k=2):
+                for page in pdf:
+                    text += page.get_text()
+
+                pdf.close()
+
+                sentences = text.split(". ")
+                for sentence in sentences:
+                    if len(sentence.strip()) > 20:
+                        self.documents.append(sentence.strip())
+
+        if self.documents:
+            self.embeddings = self.model.encode(self.documents)
+
+    def retrieve(self, query, top_k=3):
+        if not self.documents:
+            return []
+
         query_embedding = self.model.encode([query])
-        similarities = cosine_similarity(query_embedding, self.embeddings)[0]
+
+        similarities = cosine_similarity(
+            query_embedding,
+            self.embeddings
+        )[0]
 
         top_indices = np.argsort(similarities)[-top_k:][::-1]
 
-        results = [self.documents[i] for i in top_indices]
+        results = []
+
+        for i in top_indices:
+            chunk = self.documents[i]
+
+            snippet = (
+                chunk[:120] + "..."
+                if len(chunk) > 120
+                else chunk
+            )
+
+            results.append({
+                "full": chunk,
+                "snippet": snippet,
+                "score": similarities[i]
+            })
+
         return results
