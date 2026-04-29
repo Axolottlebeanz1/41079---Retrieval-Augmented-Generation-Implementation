@@ -15,13 +15,11 @@ class Retriever:
         for file in os.listdir(path):
             full_path = os.path.join(path, file)
 
-            # 📄 TXT files
             if file.endswith(".txt"):
                 with open(full_path, "r", encoding="utf-8") as f:
                     text = f.read()
                     self.documents.append(text)
 
-            # 📄 DOCX files
             elif file.endswith(".docx"):
                 doc = Document(full_path)
                 text = "\n".join([para.text for para in doc.paragraphs])
