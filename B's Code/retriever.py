@@ -14,6 +14,7 @@ class Retriever:
     ):
         self.model = SentenceTransformer("all-MiniLM-L6-v2")
         self.documents = []
+        self.doc_sources = []
         self.embeddings = []
 
         if allowed_extensions is None:
@@ -49,6 +50,7 @@ class Retriever:
                     for sentence in sentences:
                         if len(sentence.strip()) > 20:
                             self.documents.append(sentence.strip())
+                            self.doc_sources.append(file)
 
             # -------------------------
             # DOCX FILES
@@ -63,6 +65,7 @@ class Retriever:
                 for sentence in sentences:
                     if len(sentence.strip()) > 20:
                         self.documents.append(sentence.strip())
+                        self.doc_sources.append(file)
 
             # -------------------------
             # PDF FILES
@@ -80,9 +83,15 @@ class Retriever:
                 for sentence in sentences:
                     if len(sentence.strip()) > 20:
                         self.documents.append(sentence.strip())
+                        self.doc_sources.append(file)
 
         if self.documents:
             self.embeddings = self.model.encode(self.documents)
+
+            self.doc_to_id = {
+                doc: f"doc_{i}"
+                for i, doc in enumerate(self.documents)
+            }
 
     def retrieve(self, query, top_k=3):
         if not self.documents:
@@ -111,7 +120,8 @@ class Retriever:
             results.append({
                 "full": chunk,
                 "snippet": snippet,
-                "score": similarities[i]
+                "score": similarities[i],
+                "source": self.doc_sources[i]
             })
 
         return results
